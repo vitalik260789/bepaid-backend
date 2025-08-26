@@ -1,16 +1,17 @@
-// /api/create-payment.ts
+// /api/create-payment.js
 import fetch from "node-fetch";
 
-function setCors(res: any, origin: string) {
+function setCors(res, origin) {
   res.setHeader("Access-Control-Allow-Origin", origin);
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 }
 
-export default async function handler(req: any, res: any) {
+export default async function handler(req, res) {
   const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "*";
   const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:3000";
 
+  // CORS preflight
   if (req.method === "OPTIONS") {
     setCors(res, ALLOWED_ORIGIN);
     return res.status(200).end();
@@ -65,8 +66,8 @@ export default async function handler(req: any, res: any) {
 
     const data = await r.json();
     setCors(res, ALLOWED_ORIGIN);
-    return res.status(r.ok ? 200 : 400).json(data); // data.checkout.redirect_url
-  } catch (e: any) {
+    return res.status(r.ok ? 200 : 400).json(data); // ожидаем data.checkout.redirect_url
+  } catch (e) {
     setCors(res, ALLOWED_ORIGIN);
     return res.status(500).json({ error: e?.message || "Server error" });
   }
